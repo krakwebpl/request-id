@@ -14,7 +14,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Krakweb\\RequestIdBundle\\": "src/"
+      "Krakweb\\RequestId\\": "src/"
     }
   }
 }

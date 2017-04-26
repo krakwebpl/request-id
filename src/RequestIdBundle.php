@@ -9,7 +9,9 @@
 namespace Krakweb\RequestId;
 
 
-class RequestIdBundle
+use Symfony\Component\HttpKernel\Bundle\Bundle;
+
+class RequestIdBundle extends Bundle
 {
 
 }
