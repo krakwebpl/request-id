@@ -10,8 +10,10 @@ namespace Krakweb\RequestId\DependencyInjection;
 
 
 use Krakweb\RequestId\Monolog\Processor\RequestIdProcessor;
+use Krakweb\RequestId\RequestId;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 class RequestIdExtension extends Extension
@@ -39,6 +41,11 @@ class RequestIdExtension extends Extension
 
     private function loadServices()
     {
+        $definition = new Definition(RequestId::class, [
+            new Reference('request_stack')
+        ]);
+        $this->container->setDefinition('krakweb.request_id.getter', $definition);
+
         if (! $this->config['enable']) {
             return;
         }
