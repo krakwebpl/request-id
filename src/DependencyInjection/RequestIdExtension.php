@@ -17,6 +17,9 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 class RequestIdExtension extends Extension
 {
+
+    private $config = array();
+
     public function load(array $configs, ContainerBuilder $container)
     {
         $loader = new YamlFileLoader(
@@ -25,6 +28,8 @@ class RequestIdExtension extends Extension
         );
         
         $loader->load('services.yml');
+        $configuration = new Configuration();
+        $this->config = $this->processConfiguration($configuration, $configs);
         
         $this->addClassesToCompile(array(
             RequestIdProcessor::class
