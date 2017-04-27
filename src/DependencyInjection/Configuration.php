@@ -20,7 +20,7 @@ class Configuration implements ConfigurationInterface
         $rootNode = $tree->root('request_id');
         $rootNode
             ->children()
-                ->booleanNode('enaable')
+                ->booleanNode('enable')
                 ->defaultTrue()
                 ->end()
             ->end();

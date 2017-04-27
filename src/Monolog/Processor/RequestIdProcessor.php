@@ -20,7 +20,7 @@ class RequestIdProcessor
     public function onKernelRequest(GetResponseEvent $event)
     {
         $request = $event->getRequest();
-        $this->requestId = $request->get(self::HEADER_NAME, null);
+        $this->requestId = $request->headers->get(self::HEADER_NAME, null);
     }
 
     public function __invoke(array $record)
