@@ -1,7 +1,7 @@
 {
   "name": "krakwebpl/request-id",
   "type": "symfony/bundle",
-  "description": "add request id do logs",
+  "description": "agenerate unique request id",
   "authors": [
     {
       "name": "krakweb"
@@ -10,7 +10,10 @@
   "require": {
     "php": ">=5.3.0",
     "symfony/framework-bundle": "^2.8|^3.0",
-    "psr/log": "~1.0"
+    "ramsey/uuid": "~2.0|~3.0"
+  },
+  "suggest": {
+    "symfony/monolog-bundle": "For monolog processor"
   },
   "autoload": {
     "psr-4": {

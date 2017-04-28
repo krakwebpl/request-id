@@ -9,6 +9,9 @@
 namespace Krakweb\RequestId\DependencyInjection;
 
 
+use Krakweb\RequestId\Generator\UuidRequestIdGenerator;
+use Krakweb\RequestId\Listener\KernelRequest;
+use Krakweb\RequestId\Listener\KernelResponse;
 use Krakweb\RequestId\Monolog\Processor\RequestIdProcessor;
 use Krakweb\RequestId\RequestId;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -50,14 +53,38 @@ class RequestIdExtension extends Extension
             return;
         }
 
-        $definition = new Definition(RequestIdProcessor::class);
-        $definition->addTag('monolog.processor');
+        $definition = new Definition(UuidRequestIdGenerator::class);
+        $this->container->setDefinition('krakweb.request_id.generator', $definition);
+
+        $definition = new Definition(KernelRequest::class, [
+            new Reference('krakweb.request_id.generator')
+        ]);
         $definition->addTag('kernel.event_listener', [
             'event' => 'kernel.request',
             'priority' => 255,
             'method' => 'onKernelRequest'
         ]);
+        $this->container->setDefinition('krakweb.request_id.listener.request', $definition);
+
+        $definition = new Definition(RequestIdProcessor::class);
+        $definition->addTag('monolog.processor');
+        $definition->addTag('kernel.event_listener', [
+            'event' => 'kernel.request',
+            'priority' => 254,
+            'method' => 'onKernelRequest'
+        ]);
         $this->container->setDefinition('krakweb.request_id.monolog_processor', $definition);
+
+        if (!$this->config['enable_response']) {
+            return;
+        }
+
+        $definition = new Definition(KernelResponse::class);
+        $definition->addTag('kernel.event_listener', [
+            'event' => 'kernel.response',
+            'method' => 'onKernelResponse'
+        ]);
+        $this->container->setDefinition('krakweb.request_id.listener.response', $definition);
     }
 
 }

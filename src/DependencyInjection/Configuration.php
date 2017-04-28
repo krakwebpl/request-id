@@ -23,6 +23,9 @@ class Configuration implements ConfigurationInterface
                 ->booleanNode('enable')
                 ->defaultTrue()
                 ->end()
+                ->booleanNode('enable_response')
+                ->defaultTrue()
+                ->end()
             ->end();
 
         return $tree;
